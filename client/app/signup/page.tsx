@@ -31,8 +31,8 @@ export default function Signup() {
           email,
           password,
         }),
-      });
-
+      }); 
+      console.log(res)
       if (res.ok) {
         const form = e.target as HTMLFormElement;
         form.reset();

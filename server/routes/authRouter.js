@@ -1,12 +1,12 @@
 import express from "express";
-import { handleSignUp, handleLogIn, handleLogOut } from "../controllers/authController.js";
+import { handleSignup, handleLogin, handleLogout } from "../controllers/authController.js";
 
 
 const authRouter = express.Router();
 
 
-authRouter.post('/signup', handleSignUp)
-    .post('/login', handleLogIn)
-    .get('/logout', handleLogOut)
+authRouter.post('/signup', handleSignup)
+    .post('/login', handleLogin)
+    .get('/logout', handleLogout)
 
 export { authRouter };
