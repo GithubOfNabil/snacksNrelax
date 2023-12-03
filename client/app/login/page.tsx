@@ -1,7 +1,55 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+
+
+interface FormSubmitEvent extends React.FormEvent<HTMLFormElement> {
+  data: FormData;
+}
 
 export default function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: FormSubmitEvent) => {
+    e.preventDefault();
+     console.log(email, password)
+
+
+    if (!email || !password) {
+      setError("All fields are needed!");
+      return;
+    }
+    try {
+
+      const res = await fetch("http://localhost:8000/auth/login", {method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }); 
+      console.log(res)
+      if (res.ok) {
+        const form = e.target as HTMLFormElement;
+        form.reset();
+        setError("");
+      } else {
+        console.log("signup failed");
+      }
+    } catch (error) {
+      console.log("error while signup");
+    }
+  };
+
+
+
   return (
     <div>
       <nav className="flex flex-row-reverse mt-8">
@@ -30,7 +78,7 @@ export default function Login() {
       <main>
         <div className="relative flex flex-col items-center justify-center mt-40 overflow-hidden ">
           <h1 className="text-3xl font-bold text-center text-white">Log In</h1>
-          <form className="mt-6">
+          <form className="mt-6" onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -39,8 +87,10 @@ export default function Login() {
                 Email
               </label>
               <input
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
-                className="block w-full px-4 py-2.5 mt-2 text-gray-700 bg-purple-700 hover:bg-white rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                placeholder="Email"
+                className="block w-full px-4 py-2.5 mt-2 text-white bg-purple-700 rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
             <div className="mb-2">
@@ -51,10 +101,17 @@ export default function Login() {
                 Password
               </label>
               <input
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"  
                 type="password"
-                className="block w-full px-4 py-2.5 mt-2 text-gray-700 bg-purple-700 hover:bg-white rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                className="block w-full px-4 py-2.5 mt-2 text-white bg-purple-700 rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />
             </div>
+            {error && (
+              <span className="text-red-600">
+                All fields need to be filled!
+              </span>
+            )}
             <div className="mt-4 mb-2">
               <button className="w-full h-12 focus:outline-none text-white bg-[#44475A] hover:bg-purple-800 border-2 border-purple-700 focus:ring-4 focus:ring-purple-300 font-normal rounded-full text-lg px-5 py-2 mt-4">
                 Login
