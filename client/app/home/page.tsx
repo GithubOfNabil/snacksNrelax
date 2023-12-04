@@ -2,17 +2,23 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import Dropdown from "../component/component";
-import { useState } from "react";
+
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
   return (
     <div>
       <nav className="flex flex-row-reverse mt-8">
         {isOpen && (
-          <div className="flex h-12 w-52 absolute rounded-full border top-28 right-28 text-white items-center justify-center">
-            logout
+          <div className="flex flex-col h-24 w-52 space-y-2.5 z-20 bg-purple-700 absolute rounded-lg border top-28 right-28 text-white items-center justify-center">
+            <div className="">Profile</div>
+            <hr className="w-28 h-px bg-white border-0 rounded "></hr>
+            <div className="flex bg-rose-500 h-8 w-20 rounded-lg items-center justify-center ">
+              Log Out
+            </div>
           </div>
         )}
         <div className="flex w-52 h-12 items-center justify-center focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-normal rounded-full text-lg mr-28 ml-14 mt-4">
@@ -40,6 +46,41 @@ export default function Home() {
           className="ml-48"
         />
       </nav>
+
+      <main>
+        {/* SearchBar */}
+        <div className="relative h-16  bg-[#44475A]">
+          <form action="">
+            <div className="absolute inset-x-1/3 -bottom-7 ">
+              <input
+                onChange={(e) => setSearch(e.target.value)}
+                type="text"
+                placeholder="Search"
+                className="w-full h-12 pl-10 pr-4 py-2 text-white bg-purple-700 rounded-md focus:border-gray-400 focus:ring-gray-300 focus:outline-none focus:ring focus:ring-opacity-40"
+              />
+              <div
+                className="absolute inset-y-0 left-0 pl-3  
+                    flex items-center  
+                    pointer-events-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="16"
+                  width="16"
+                  viewBox="0 0 512 512"
+                >
+                  <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+                </svg>
+              </div>
+            </div>
+          </form>
+        </div>
+
+
+
+
+
+      </main>
     </div>
   );
 }
