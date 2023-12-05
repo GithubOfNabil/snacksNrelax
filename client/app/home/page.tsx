@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import ContentCard from "../component/contentCard";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -76,10 +77,17 @@ export default function Home() {
           </form>
         </div>
 
-
-
-
-
+        {/*card section*/}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-16 ml-8 gap-x-px gap-y-6 ">
+          <ContentCard />
+          <ContentCard />
+          <ContentCard />
+          <ContentCard />
+          <ContentCard />
+          <ContentCard />
+          <ContentCard />
+          <ContentCard />
+        </div>
       </main>
     </div>
   );
