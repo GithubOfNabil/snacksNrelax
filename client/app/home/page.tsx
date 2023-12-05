@@ -4,8 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import ContentCard from "../component/contentCard";
 import AddModal from "../component/addModal";
+import {YoutubeSelect, InstagramSelect, TiktokSelect, FacebookSelect} from "../component/socialSelect";
 
-import { Children, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,14 +47,16 @@ export default function Home() {
           + Add
         </button>
 
-        <AddModal open={openModal} onClose={() => setOpenModal(false)}>
-        <Image
-          src="/logo.png"
-          width={80}
-          height={80}
-          alt="Picture of the author"
-          className="ml-48"
-        />
+        <AddModal
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+        >
+        <div className="grid grid-cols-4 ">  
+        <YoutubeSelect />
+        <InstagramSelect />
+        <TiktokSelect />
+        <FacebookSelect />
+        </div>
         </AddModal>
 
         <Link href="/" className="mr-auto flex flex-row">
@@ -100,7 +103,8 @@ export default function Home() {
         </div>
 
         {/*card section*/}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-16 ml-8 gap-x-px gap-y-6 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-16 ml-28 mr-24 gap-y-6 ">
+          <ContentCard />
           <ContentCard />
           <ContentCard />
           <ContentCard />
