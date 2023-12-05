@@ -3,15 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import ContentCard from "../component/contentCard";
+import AddModal from "../component/addModal";
 
-import { useEffect, useRef, useState } from "react";
+import { Children, useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   return (
     <div>
+      {/*Navbar*/}
       <nav className="flex flex-row-reverse mt-8">
         {isOpen && (
           <div className="flex flex-col h-24 w-52 space-y-2.5 z-20 bg-purple-700 absolute rounded-lg border top-28 right-28 text-white items-center justify-center">
@@ -22,7 +25,7 @@ export default function Home() {
             </div>
           </div>
         )}
-        <div className="flex w-52 h-12 items-center justify-center focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-normal rounded-full text-lg mr-28 ml-14 mt-4">
+        <div className="flex w-52 h-12 items-center justify-center focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-normal rounded-full text-lg mr-28 ml-2 mt-4">
           <Image
             src="/logo.png"
             width={45}
@@ -33,6 +36,25 @@ export default function Home() {
           />
           <div onClick={() => setIsOpen(!isOpen)}>Nabil</div>
         </div>
+
+        <button
+          className="w-40 h-12 mt-4 text-white bg-[#44475A] border-2 border-purple-700 hover:bg-purple-600 font-normal rounded-full text-lg px-5 py-2.5"
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        >
+          + Add
+        </button>
+
+        <AddModal open={openModal} onClose={() => setOpenModal(false)}>
+        <Image
+          src="/logo.png"
+          width={80}
+          height={80}
+          alt="Picture of the author"
+          className="ml-48"
+        />
+        </AddModal>
 
         <Link href="/" className="mr-auto flex flex-row">
           <div className="text-3xl font-medium mt-5">Snacks</div>
