@@ -4,14 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import ContentCard from "../component/contentCard";
 import AddModal from "../component/addModal";
-import {YoutubeSelect, InstagramSelect, TiktokSelect, FacebookSelect} from "../component/socialSelect";
+import {
+  YoutubeSelect,
+  InstagramSelect,
+  TiktokSelect,
+  FacebookSelect,
+} from "../component/socialSelect";
 
 import { useState } from "react";
+import { YoutubeLink } from "../component/submitLink";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [select, setSelect] = useState<boolean>(false);
 
   return (
     <div>
@@ -38,6 +45,8 @@ export default function Home() {
           <div onClick={() => setIsOpen(!isOpen)}>Nabil</div>
         </div>
 
+
+        {/*Add button and modal popUp */}
         <button
           className="w-40 h-12 mt-4 text-white bg-[#44475A] border-2 border-purple-700 hover:bg-purple-600 font-normal rounded-full text-lg px-5 py-2.5"
           onClick={() => {
@@ -47,19 +56,27 @@ export default function Home() {
           + Add
         </button>
 
-        <AddModal
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-        >
-        <div className="grid grid-cols-4 ">  
-        <YoutubeSelect />
-        <InstagramSelect />
-        <TiktokSelect />
-        <FacebookSelect />
-        </div>
+        <AddModal open={openModal} onClose={() => {setOpenModal(false); setSelect(false)}}>
+          {!select &&
+            <div className="grid grid-cols-4 ">
+              <YoutubeSelect
+
+                setSelect={() => setSelect(true)}
+              ></YoutubeSelect>
+              <InstagramSelect />
+              <TiktokSelect />
+              <FacebookSelect />
+            </div>
+          }
+          {select &&
+          <div className=" mt-16 ">
+            <YoutubeLink />
+          </div>}
         </AddModal>
 
-        <Link href="/" className="mr-auto flex flex-row">
+
+
+        <Link href="/home" className="mr-auto flex flex-row">
           <div className="text-3xl font-medium mt-5">Snacks</div>
           <div className="text-3xl font-medium text-purple-600 mt-5">-N-</div>
           <div className="text-3xl font-medium mt-5">Relax</div>

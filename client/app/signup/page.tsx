@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface FormSubmitEvent extends React.FormEvent<HTMLFormElement> {
@@ -13,6 +14,8 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const router = useRouter();
   console.log(name);
 
   const handleSubmit = async (e: FormSubmitEvent) => {
@@ -35,10 +38,11 @@ export default function Signup() {
       }); 
       console.log(res)
       if (res.ok) {
+        router.push('/home')
+      } else {
         const form = e.target as HTMLFormElement;
         form.reset();
         setError("");
-      } else {
         console.log("signup failed");
       }
     } catch (error) {
@@ -127,6 +131,7 @@ export default function Signup() {
                 All fields need to be filled!
               </span>
             )}
+          
           </form>
         </div>
       </main>

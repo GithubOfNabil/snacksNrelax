@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -14,6 +15,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [wrong, setWrong] = useState(false)
+  const router = useRouter();
 
   const handleSubmit = async (e: FormSubmitEvent) => {
     e.preventDefault();
@@ -37,10 +40,12 @@ export default function Login() {
       }); 
       console.log(res)
       if (res.ok) {
+        router.push('/home');
+      } else {
+        setWrong(true);
         const form = e.target as HTMLFormElement;
         form.reset();
         setError("");
-      } else {
         console.log("signup failed");
       }
     } catch (error) {
@@ -112,6 +117,10 @@ export default function Login() {
                 All fields need to be filled!
               </span>
             )}
+              {wrong && 
+             <span className="text-red-600">
+             Wrong email or password
+           </span>}
             <div className="mt-4 mb-2">
               <button className="w-full h-12 focus:outline-none text-white bg-[#44475A] hover:bg-purple-800 border-2 border-purple-700 focus:ring-4 focus:ring-purple-300 font-normal rounded-full text-lg px-5 py-2 mt-4">
                 Login

@@ -15,7 +15,7 @@ async function handleSignup(req, res) {
         console.log(newUser)
         console.log(token)
 
-        res.cookie('uid', token);
+        res.cookie('uid', token, {httpOnly:true});
         res.status(200);
         res.json({"msg":"success"});
     } catch (error) {
@@ -32,13 +32,15 @@ async function handleLogin(req, res) {
         console.log(oldUser);
         if (oldUser.password === password) {
             const token = setUser(oldUser);
-            res.cookie('uid', token);
-            res.status(200).redirect('#');
+            res.cookie('uid', token), {httpOnly:true};
+            res.status(200);
+            res.json({"msg":"success"});
+
         } else {
             res.status(400).json({ "msg": "incorect" });
         }
     } catch (error) {
-        res.status(400).render('#');
+        res.status(400);
     }
 }
 
