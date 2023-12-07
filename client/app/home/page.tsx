@@ -13,6 +13,7 @@ import {
 
 import { useEffect, useState } from "react";
 import { YoutubeLink } from "../component/submitLink";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,12 +21,44 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [select, setSelect] = useState<boolean>(false);
   const [name, setName] = useState("");
+  const router = useRouter();
+
+  const handleUserData = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/profile/name", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        router.push("/login");
+      } else {
+        setName(data.name);
+      }
+    } catch {
+      router.push("/login");
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const logOutRes = await fetch("http://localhost:8000/auth/logout", {
+        method: "GET",
+        credentials: "include",
+      });
+      console.log(logOutRes)
+      if (logOutRes.ok) {
+        router.push("/login");
+      } else {
+        console.log("logout failed");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    fetch("http://localhost:8000/profile/name", {method: 'GET', credentials: 'include',},)
-      .then((response) => response.json())
-      .then((data) => setName(data.name));
-    
+    handleUserData();
   }, []);
 
   return (
@@ -36,9 +69,12 @@ export default function Home() {
         {isOpen && (
           <div className="flex flex-col h-24 w-52 space-y-2.5 z-20 bg-purple-700 absolute rounded-lg border top-28 right-28 text-white items-center justify-center">
             <hr className="w-28 h-px bg-white border-0 rounded "></hr>
-            <div className="flex bg-rose-500 h-8 w-20 rounded-lg items-center justify-center ">
+            <button
+              className="flex bg-rose-500 h-8 w-20 rounded-lg items-center justify-center "
+              onClick={handleLogout}
+            >
               Log Out
-            </div>
+            </button>
           </div>
         )}
 

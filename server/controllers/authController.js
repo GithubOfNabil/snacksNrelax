@@ -19,7 +19,7 @@ async function handleSignup(req, res) {
         res.status(200);
         res.json({"msg":"success"});
     } catch (error) {
-        res.status(400).redirect('#')
+        res.status(400)
     }
 
 };
@@ -45,11 +45,12 @@ async function handleLogin(req, res) {
 }
 
 async function handleLogout(req, res) {
+    console.log("/logout hitted")
     res.cookie('uid', null, {
         expires: new Date(Date.now()),
         httpOnly: true
     });
-    res.redirect('#');
+    res.status(200).json({"msg":"logged out"});
 };
 
 

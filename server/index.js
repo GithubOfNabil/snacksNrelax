@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import { authRouter } from "./routes/authRouter.js";
 import {connectMongoDB} from "./connect.js"
 import { profileRouter } from "./routes/profileRouter.js";
+import { restictToLogInOnly } from "./middlewares/authMiddleware.js";
 
 
 
@@ -27,7 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 app.use('/auth', authRouter);
-app.use('/profile', profileRouter);
+app.use('/profile',restictToLogInOnly, profileRouter);
 
 
 
