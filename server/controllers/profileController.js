@@ -1,5 +1,7 @@
 import { UserModel } from "../models/userModel.js";
+import { linkModel } from "../models/linkModel.js";
 import { getUser } from "../services/jwtAuth.js";
+
 
 async function handleName(req, res){
     const jwt_token = req.cookies.uid;
@@ -8,5 +10,14 @@ async function handleName(req, res){
     
 };
 
+async function handleContentAdd(req, res){
+console.log("/content/add hitted")
+const {link} = req.body;
+console.log(link);
+res.status(200).json({"msg":"added successfully"});
+};
 
-export {handleName};
+async function handleContentServe(req, res){
+
+};
+export {handleName, handleContentAdd, handleContentServe};
