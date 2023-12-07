@@ -21,7 +21,11 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [select, setSelect] = useState<boolean>(false);
   const [name, setName] = useState("");
+  const [back, setBack] = useState<boolean>(false);
   const router = useRouter();
+   
+
+
 
   const handleUserData = async () => {
     try {
@@ -108,17 +112,18 @@ export default function Home() {
             setSelect(false);
           }}
         >
+    
           {!select && (
-            <div className="grid grid-cols-4 ">
+            <div className="grid grid-cols-4 mt-12">
               <YoutubeSelect setSelect={() => setSelect(true)}></YoutubeSelect>
               <InstagramSelect />
               <TiktokSelect />
               <FacebookSelect />
             </div>
           )}
-          {select && (
-            <div className=" mt-16 ">
-              <YoutubeLink />
+          {select &&  (
+            <div >
+              <YoutubeLink setSelect={() => setSelect(false)} ></YoutubeLink>
             </div>
           )}
         </AddModal>
