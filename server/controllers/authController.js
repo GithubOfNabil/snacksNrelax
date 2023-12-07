@@ -32,7 +32,7 @@ async function handleLogin(req, res) {
         console.log(oldUser);
         if (oldUser.password === password) {
             const token = setUser(oldUser);
-            res.cookie('uid', token), {httpOnly:true};
+            res.cookie('uid', token, {httpOnly:true});
             res.status(200);
             res.json({"msg":"success"});
 

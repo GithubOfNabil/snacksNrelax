@@ -12,9 +12,15 @@ function setUser(user) {
     return Jwt.sign(payload, secret);
 }
 
-function verifyUser(token) {
+
+function getUser(token) {
+    console.log(token)
     if (!token) return null;
-    return Jwt.verify(token, secret);
+    const decoded = Jwt.verify(token, secret); 
+    console.log(decoded);
+    return decoded;
 };
 
-export { setUser, verifyUser };
+
+
+export { setUser, getUser  };

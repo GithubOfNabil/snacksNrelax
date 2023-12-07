@@ -37,6 +37,7 @@ export default function Login() {
           email,
           password,
         }),
+      credentials: 'include',
       }); 
       console.log(res)
       if (res.ok) {
@@ -46,10 +47,10 @@ export default function Login() {
         const form = e.target as HTMLFormElement;
         form.reset();
         setError("");
-        console.log("signup failed");
+        console.log("Login failed");
       }
     } catch (error) {
-      console.log("error while signup");
+      console.log("error while Login");
     }
   };
 

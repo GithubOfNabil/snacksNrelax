@@ -11,7 +11,7 @@ import {
   FacebookSelect,
 } from "../component/socialSelect";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { YoutubeLink } from "../component/submitLink";
 
 export default function Home() {
@@ -19,20 +19,30 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [select, setSelect] = useState<boolean>(false);
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:8000/profile/name", {method: 'GET', credentials: 'include',},)
+      .then((response) => response.json())
+      .then((data) => setName(data.name));
+    
+  }, []);
 
   return (
     <div>
       {/*Navbar*/}
       <nav className="flex flex-row-reverse mt-8">
+        {/* Profile and logout PopUp*/}
         {isOpen && (
           <div className="flex flex-col h-24 w-52 space-y-2.5 z-20 bg-purple-700 absolute rounded-lg border top-28 right-28 text-white items-center justify-center">
-            <div className="">Profile</div>
             <hr className="w-28 h-px bg-white border-0 rounded "></hr>
             <div className="flex bg-rose-500 h-8 w-20 rounded-lg items-center justify-center ">
               Log Out
             </div>
           </div>
         )}
+
+        {/*UserName and Profile Picture */}
         <div className="flex w-52 h-12 items-center justify-center focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-normal rounded-full text-lg mr-28 ml-2 mt-4">
           <Image
             src="/logo.png"
@@ -42,9 +52,8 @@ export default function Home() {
             className="ml-2 mr-20"
             onClick={() => setIsOpen(!isOpen)}
           />
-          <div onClick={() => setIsOpen(!isOpen)}>Nabil</div>
+          <div onClick={() => setIsOpen(!isOpen)}>{name}</div>
         </div>
-
 
         {/*Add button and modal popUp */}
         <button
@@ -56,26 +65,29 @@ export default function Home() {
           + Add
         </button>
 
-        <AddModal open={openModal} onClose={() => {setOpenModal(false); setSelect(false)}}>
-          {!select &&
+        <AddModal
+          open={openModal}
+          onClose={() => {
+            setOpenModal(false);
+            setSelect(false);
+          }}
+        >
+          {!select && (
             <div className="grid grid-cols-4 ">
-              <YoutubeSelect
-
-                setSelect={() => setSelect(true)}
-              ></YoutubeSelect>
+              <YoutubeSelect setSelect={() => setSelect(true)}></YoutubeSelect>
               <InstagramSelect />
               <TiktokSelect />
               <FacebookSelect />
             </div>
-          }
-          {select &&
-          <div className=" mt-16 ">
-            <YoutubeLink />
-          </div>}
+          )}
+          {select && (
+            <div className=" mt-16 ">
+              <YoutubeLink />
+            </div>
+          )}
         </AddModal>
 
-
-
+        {/*Title and Logo */}
         <Link href="/home" className="mr-auto flex flex-row">
           <div className="text-3xl font-medium mt-5">Snacks</div>
           <div className="text-3xl font-medium text-purple-600 mt-5">-N-</div>
