@@ -13,6 +13,8 @@ async function handleName(req, res){
 async function handleContentAdd(req, res){
 console.log("/content/add hitted")
 const {link} = req.body;
+const social = req.query.social;
+console.log(social);
 console.log(link);
 res.status(200).json({"msg":"added successfully"});
 };

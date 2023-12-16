@@ -11,8 +11,8 @@ import {
   FacebookSelect,
 } from "../component/socialSelect";
 
-import { useEffect, useState } from "react";
-import { YoutubeLink } from "../component/submitLink";
+import { useEffect, useReducer, useRef, useState } from "react";
+import { SubmitLink } from "../component/submitLink";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -21,10 +21,10 @@ export default function Home() {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [select, setSelect] = useState<boolean>(false);
   const [name, setName] = useState("");
-  const [back, setBack] = useState<boolean>(false);
+  const [selected, setSelected] = useState<String>("");
   const router = useRouter();
-   
-
+  const ref = useRef(null);
+ 
 
 
   const handleUserData = async () => {
@@ -115,15 +115,15 @@ export default function Home() {
     
           {!select && (
             <div className="grid grid-cols-4 mt-12">
-              <YoutubeSelect setSelect={() => setSelect(true)}></YoutubeSelect>
+              <div onClick={() =>setSelected("youtube")}><YoutubeSelect setSelect={() => setSelect(true)}></YoutubeSelect></div>
               <InstagramSelect />
               <TiktokSelect />
-              <FacebookSelect />
+              {/* <FacebookSelect /> */}
             </div>
           )}
           {select &&  (
             <div >
-              <YoutubeLink setSelect={() => setSelect(false)} ></YoutubeLink>
+              <SubmitLink socialName={selected} setSelect={() => setSelect(false)} ></SubmitLink>
             </div>
           )}
         </AddModal>

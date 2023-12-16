@@ -5,12 +5,13 @@ import { LinkAdded } from "./linkAdded";
 
 type propType = {
   setSelect: () => void;
+  socialName: String;
 };
 interface FormSubmitEvent extends React.FormEvent<HTMLFormElement> {
   data: FormData;
 }
 
-export const YoutubeLink: React.FC<propType> = ({ setSelect }) => {
+export const SubmitLink: React.FC<propType> = ({ setSelect, socialName }) => {
   const [addDone, setAddDone] = useState(false);
   const [link, setLink] = useState("");
   const [empty, setEmpty] = useState(false);
@@ -24,7 +25,7 @@ export const YoutubeLink: React.FC<propType> = ({ setSelect }) => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/profile/content/add", {
+      const res = await fetch(`http://localhost:8000/profile/content/add/?social=${socialName}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +62,7 @@ export const YoutubeLink: React.FC<propType> = ({ setSelect }) => {
           </button>
 
           <p className=" text-xl text-white mb-2 mt-14">
-            Enter YouTube channel url...{" "}
+            {`Enter ${socialName} creator/influencer User Name...`}
           </p>
           <form action="" onSubmit={handleSubmit}>
             <input
