@@ -8,10 +8,9 @@ import {
   YoutubeSelect,
   InstagramSelect,
   TiktokSelect,
-  FacebookSelect,
 } from "../component/socialSelect";
 
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitLink } from "../component/submitLink";
 import { useRouter } from "next/navigation";
 
@@ -23,7 +22,6 @@ export default function Home() {
   const [name, setName] = useState("");
   const [selected, setSelected] = useState<String>("");
   const router = useRouter();
-  const ref = useRef(null);
  
 
 
@@ -116,8 +114,9 @@ export default function Home() {
           {!select && (
             <div className="grid grid-cols-4 mt-12">
               <div onClick={() =>setSelected("youtube")}><YoutubeSelect setSelect={() => setSelect(true)}></YoutubeSelect></div>
-              <InstagramSelect />
-              <TiktokSelect />
+              <div onClick={() =>setSelected("instagram")}><InstagramSelect setSelect={() => setSelect(true)}></InstagramSelect></div>
+              <div onClick={() =>setSelected("tiktok")}><TiktokSelect setSelect={() => setSelect(true)}></TiktokSelect></div>
+              
               {/* <FacebookSelect /> */}
             </div>
           )}
