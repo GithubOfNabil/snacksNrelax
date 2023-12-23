@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const videoSchema = new mongoose.Schema({
+const igVideoSchema = new mongoose.Schema({
     creator: {
         type: String,
         unique: true,
@@ -17,6 +17,6 @@ const videoSchema = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-const videoModel = mongoose.model('video', videoSchema);
+const igVideoModel = mongoose.model('igVideo', igVideoSchema);
 
-export { videoModel };
+export { igVideoModel };

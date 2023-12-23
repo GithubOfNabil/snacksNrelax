@@ -5,6 +5,8 @@ import { authRouter } from "./routes/authRouter.js";
 import {connectMongoDB} from "./connect.js"
 import { profileRouter } from "./routes/profileRouter.js";
 import { restictToLogInOnly } from "./middlewares/authMiddleware.js";
+import getYtVideos from "./services/ytScrapper.js";
+import getIgVideos from "./services/igScrapper.js";
 
 
 
@@ -30,6 +32,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/auth', authRouter);
 app.use('/profile',restictToLogInOnly, profileRouter);
 
+
+// getYtVideos();
+// getIgVideos();
+// app.get('/test', youtubeScrapper);
 
 
 
