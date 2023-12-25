@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors"
 import cookieParser from "cookie-parser";
+import cron from 'node-cron';
 import { authRouter } from "./routes/authRouter.js";
 import {connectMongoDB} from "./connect.js"
 import { profileRouter } from "./routes/profileRouter.js";
 import { restictToLogInOnly } from "./middlewares/authMiddleware.js";
-import getYtVideos from "./services/ytScrapper.js";
-import getIgVideos from "./services/igScrapper.js";
+import {getYtVideos} from "./services/ytScrapper.js";
+import {getIgVideos} from "./services/igScrapper.js";
 
 
 
@@ -33,9 +34,11 @@ app.use('/auth', authRouter);
 app.use('/profile',restictToLogInOnly, profileRouter);
 
 
-// getYtVideos();
-// getIgVideos();
-// app.get('/test', youtubeScrapper);
+cron.schedule('0 */12 * * *', () => {
+    // getYtVideos();
+    // getIgVideos();
+    console.log('Running every 12 hours!');
+});
 
 
 

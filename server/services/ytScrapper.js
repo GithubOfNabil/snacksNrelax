@@ -2,7 +2,7 @@
 - Get all the creator's user name from the link collection
 - Use those user name and scrape for link and thubmbail
 - Put those data on video collection with their user name
-- Do all these work after every 24 hours; 
+- Do all these work after every 12 hours; 
    
 - get every user name from the link collection, if it already exist in video collection then update the data if does not exists then create a new one with data
  */
@@ -91,4 +91,4 @@ async function getYtVideos() {
 
 };
 
-export default getYtVideos;
+export {getYtVideos, youtubeScrapper};

@@ -9,11 +9,11 @@ const ytVideoSchema = new mongoose.Schema({
     videos: {
         type: [String],
         unique: true,
-        required: true
+        // required: true
     },
     thumbnails:{
         type: [String], 
-        required: true
+        // required: true
     }
 }, { timestamps: true })
 

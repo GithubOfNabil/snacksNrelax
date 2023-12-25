@@ -80,9 +80,6 @@ async function instagramScrapper(allUserId) {
         await browser.close();
     }
 
-
-
-
 }
 
 
@@ -104,4 +101,9 @@ async function getIgVideos() {
 
 };
 
-export default getIgVideos;
+
+
+
+
+
+export {getIgVideos, instagramScrapper};

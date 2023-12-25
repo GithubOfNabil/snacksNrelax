@@ -1,4 +1,6 @@
 import { UserModel } from "../models/userModel.js";
+import { ytVideoModel } from "../models/ytVideoModel.js";
+import { igVideoModel } from "../models/igVideoMode.js";
 import { linkModel } from "../models/linkModel.js";
 import { getUser } from "../services/jwtAuth.js";
 import mongoose from "mongoose";
@@ -108,7 +110,40 @@ async function handleContentAdd(req, res) {
 
 
 
-async function handleContentServe(req, res) {
+
+async function handleFetchCreator(jwt_token, platform){
+    const user_id = getUser(jwt_token)._id;
+    console.log(user_id);
+    try {
+        const doc = await linkModel.findOne({userId: user_id});
+        if(doc && platform === 'youtube'){
+            return doc.youtube;
+        }
+    } catch (error) {
+        
+    }
+}
+
+async function handleYoutubeServe(req, res) {
+const creators = await handleFetchCreator(req.cookies.uid, 'youtube');
+let videos = [];
+let thumbnails = [];
+for (let creator of creators){
+    const links = await ytVideoModel.findOne({creator : creator});
+        videos = videos.concat(links.videos);
+        thumbnails = thumbnails.concat(links.thumbnails);
+    
+}
+// console.log(videos);
+// console.log(thumbnails);
+const data = {'videos': videos, 'thumbnails': thumbnails};
+
+res.json(data);
+res.status(200);
 
 };
-export { handleName, handleContentAdd, handleContentServe };
+
+async function handleInstagramServe(req, res){
+
+};
+export { handleName, handleContentAdd, handleYoutubeServe, handleInstagramServe };
