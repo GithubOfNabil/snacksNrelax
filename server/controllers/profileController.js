@@ -1,9 +1,11 @@
+import mongoose from "mongoose";
 import { UserModel } from "../models/userModel.js";
 import { ytVideoModel } from "../models/ytVideoModel.js";
 import { igVideoModel } from "../models/igVideoMode.js";
 import { linkModel } from "../models/linkModel.js";
 import { getUser } from "../services/jwtAuth.js";
-import mongoose from "mongoose";
+import { youtubeScrapper } from "../services/ytScrapper.js";
+import { instagramScrapper } from "../services/igScrapper.js"
 
 
 
@@ -27,6 +29,7 @@ async function handleContentAdd(req, res) {
     switch (social) {
         case "youtube":
             realId = link.slice(24);
+            await youtubeScrapper(realId);
 
             await linkModel.findOneAndUpdate(
                 { userId: user_id }, // Query criteria
@@ -53,7 +56,7 @@ async function handleContentAdd(req, res) {
             break;
         case "instagram":
             realId = link.slice(26, -1);
-
+            await instagramScrapper([realId]);
             await linkModel.findOneAndUpdate(
                 { userId: user_id }, // Query criteria
                 {
@@ -111,39 +114,61 @@ async function handleContentAdd(req, res) {
 
 
 
-async function handleFetchCreator(jwt_token, platform){
+async function handleFetchCreator(jwt_token, platform) {
     const user_id = getUser(jwt_token)._id;
-    console.log(user_id);
+    // console.log(user_id);
     try {
-        const doc = await linkModel.findOne({userId: user_id});
-        if(doc && platform === 'youtube'){
+        const doc = await linkModel.findOne({ userId: user_id });
+        if (doc && platform === 'youtube') {
             return doc.youtube;
+        } else {
+            return doc.instagram;
         }
     } catch (error) {
-        
+
     }
 }
 
 async function handleYoutubeServe(req, res) {
-const creators = await handleFetchCreator(req.cookies.uid, 'youtube');
-let videos = [];
-let thumbnails = [];
-for (let creator of creators){
-    const links = await ytVideoModel.findOne({creator : creator});
+    const creators = await handleFetchCreator(req.cookies.uid, 'youtube');
+    let videos = [];
+    let thumbnails = [];
+    for (let creator of creators) {
+        const links = await ytVideoModel.findOne({ creator: creator });
         videos = videos.concat(links.videos);
         thumbnails = thumbnails.concat(links.thumbnails);
-    
-}
-// console.log(videos);
-// console.log(thumbnails);
-const data = {'videos': videos, 'thumbnails': thumbnails};
 
-res.json(data);
-res.status(200);
+    }
+    // console.log(videos);
+    // console.log(thumbnails);
+    const data = { 'videos': videos, 'thumbnails': thumbnails };
+
+    res.json(data);
+    res.status(200);
 
 };
 
-async function handleInstagramServe(req, res){
+async function handleInstagramServe(req, res) {
+    const creators = await handleFetchCreator(req.cookies.uid, 'instagram');
+    let videos = [];
+    let thumbnails = [];
+    let title = [];
+    for (let creator of creators) {
+        const links = await igVideoModel.findOne({ creator: creator });
+        videos = videos.concat(links.videos);
+        thumbnails = thumbnails.concat(links.thumbnails);
+        title.push(creator);
+        title.push(creator);
+        title.push(creator);
+
+
+    }
+    // console.log(videos);
+    // console.log(title);
+    const data = { 'videos': videos, 'thumbnails': thumbnails, 'title': title };
+
+    res.json(data);
+    res.status(200);
 
 };
 export { handleName, handleContentAdd, handleYoutubeServe, handleInstagramServe };

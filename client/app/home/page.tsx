@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ContentCard from "../component/contentCard";
+import IgContentCard from "../component/igContentCard";
 import AddModal from "../component/addModal";
 import {
   YoutubeSelect,
@@ -21,12 +22,13 @@ export default function Home() {
   const [select, setSelect] = useState<boolean>(false);
   const [name, setName] = useState("");
   const [selected, setSelected] = useState<String>("");
-  const [video , setVideo] = useState<any[]>([]);
+  const [video, setVideo] = useState<any[]>([]);
+  const [reel, setReel] = useState<any[]>([]);
+  const [reelTh, setReelTh] = useState<any[]>([]);
+  const [reelTtl, setReelTtl] = useState<any[]>([]);
   const [thumbnail, setThumbnail] = useState<any[]>([]);
 
   const router = useRouter();
- 
-
 
   const handleUserData = async () => {
     try {
@@ -51,9 +53,9 @@ export default function Home() {
         method: "GET",
         credentials: "include",
       });
-      console.log(logOutRes)
+      console.log(logOutRes);
       if (logOutRes.ok) {
-        router.push("/login");
+        router.push("/");
       } else {
         console.log("logout failed");
       }
@@ -62,16 +64,18 @@ export default function Home() {
     }
   };
 
-
-  const handleContent = async () => {
+  const handleYtContent = async () => {
     try {
-      const res = await fetch("http://localhost:8000/profile/content/serve/youtube", {
-        method: "GET",
-        credentials: "include",
-      });
+      const res = await fetch(
+        "http://localhost:8000/profile/content/serve/youtube",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
-        console.log("error")
+        console.log("error");
       } else {
         setVideo(data.videos);
         setThumbnail(data.thumbnails);
@@ -82,23 +86,39 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    handleContent();
-  }, []);
+  const handleIgContent = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:8000/profile/content/serve/instagram",
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) {
+        console.log("error");
+      } else {
+        setReel(data.videos);
+        setReelTh(data.thumbnails);
+        setReelTtl(data.title);
 
-
-
-  useEffect(() => {
-    handleUserData();
-  }, []);
+        // console.log(typeof [data.vide)
+      }
+    } catch {
+      router.push("/home");
+    }
+  };
 
   
+  useEffect(() => {
+    handleUserData();
+    handleYtContent();
+    handleIgContent();
+  }, []);
 
-
-// console.log(video);
-// console.log(thumbnail);
-
-
+  // console.log(video);
+  // console.log(thumbnail);
 
   return (
     <div>
@@ -127,7 +147,7 @@ export default function Home() {
             className="ml-2 mr-20"
             onClick={() => setIsOpen(!isOpen)}
           />
-          <div onClick={() => setIsOpen(!isOpen)}>{name}</div>
+          <div className ="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>{name}</div>
         </div>
 
         {/*Add button and modal popUp */}
@@ -139,7 +159,7 @@ export default function Home() {
         >
           + Add
         </button>
-
+            
         <AddModal
           open={openModal}
           onClose={() => {
@@ -147,19 +167,31 @@ export default function Home() {
             setSelect(false);
           }}
         >
-    
           {!select && (
             <div className="grid grid-cols-4 mt-12">
-              <div onClick={() =>setSelected("youtube")}><YoutubeSelect setSelect={() => setSelect(true)}></YoutubeSelect></div>
-              <div onClick={() =>setSelected("instagram")}><InstagramSelect setSelect={() => setSelect(true)}></InstagramSelect></div>
-              <div onClick={() =>setSelected("tiktok")}><TiktokSelect setSelect={() => setSelect(true)}></TiktokSelect></div>
-              
+              <div onClick={() => setSelected("youtube")}>
+                <YoutubeSelect
+                  setSelect={() => setSelect(true)}
+                ></YoutubeSelect>
+              </div>
+              <div onClick={() => setSelected("instagram")}>
+                <InstagramSelect
+                  setSelect={() => setSelect(true)}
+                ></InstagramSelect>
+              </div>
+              <div onClick={() => setSelected("tiktok")}>
+                <TiktokSelect setSelect={() => setSelect(true)}></TiktokSelect>
+              </div>
+
               {/* <FacebookSelect /> */}
             </div>
           )}
-          {select &&  (
-            <div >
-              <SubmitLink socialName={selected} setSelect={() => setSelect(false)} ></SubmitLink>
+          {select && (
+            <div>
+              <SubmitLink
+                socialName={selected}
+                setSelect={() => setSelect(false)}
+              ></SubmitLink>
             </div>
           )}
         </AddModal>
@@ -209,14 +241,25 @@ export default function Home() {
         </div>
 
         {/*card section*/}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-16 ml-28 mr-24 gap-y-6 ">
-          {video.map((item, index) =>{ 
-            
-            return <ContentCard
-            key={item.id}
-            video={item}
-            thumbnail={thumbnail[index]}
-            /> 
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-16 mb-8 ml-28 mr-24 gap-y-6 z-[-1]">
+          {video.map((item, index) => {
+            return (
+              <ContentCard
+                key={item.id}
+                video={item}
+                thumbnail={thumbnail[index]}
+              />
+            );
+          })}
+         {reel.map((item, index) => {
+            return (
+              <IgContentCard
+                key={item.id}
+                video={item}
+                thumbnail={reelTh[index]}
+                title={reelTtl[index]}
+              />
+            );
           })}
         </div>
       </main>
