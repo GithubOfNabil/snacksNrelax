@@ -21,6 +21,9 @@ export default function Home() {
   const [select, setSelect] = useState<boolean>(false);
   const [name, setName] = useState("");
   const [selected, setSelected] = useState<String>("");
+  const [video , setVideo] = useState<any[]>([]);
+  const [thumbnail, setThumbnail] = useState<any[]>([]);
+
   const router = useRouter();
  
 
@@ -59,9 +62,43 @@ export default function Home() {
     }
   };
 
+
+  const handleContent = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/profile/content/serve/youtube", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log("error")
+      } else {
+        setVideo(data.videos);
+        setThumbnail(data.thumbnails);
+        // console.log(typeof [data.vide)
+      }
+    } catch {
+      router.push("/home");
+    }
+  };
+
+  useEffect(() => {
+    handleContent();
+  }, []);
+
+
+
   useEffect(() => {
     handleUserData();
   }, []);
+
+  
+
+
+// console.log(video);
+// console.log(thumbnail);
+
+
 
   return (
     <div>
@@ -173,15 +210,14 @@ export default function Home() {
 
         {/*card section*/}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-16 ml-28 mr-24 gap-y-6 ">
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
-          <ContentCard />
+          {video.map((item, index) =>{ 
+            
+            return <ContentCard
+            key={item.id}
+            video={item}
+            thumbnail={thumbnail[index]}
+            /> 
+          })}
         </div>
       </main>
     </div>
