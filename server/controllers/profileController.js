@@ -133,11 +133,13 @@ async function handleYoutubeServe(req, res) {
     const creators = await handleFetchCreator(req.cookies.uid, 'youtube');
     let videos = [];
     let thumbnails = [];
-    for (let creator of creators) {
-        const links = await ytVideoModel.findOne({ creator: creator });
-        videos = videos.concat(links.videos);
-        thumbnails = thumbnails.concat(links.thumbnails);
-
+    if (creators.length != 0) {
+        for (let creator of creators) {
+            const links = await ytVideoModel.findOne({ creator: creator });
+            videos = videos.concat(links.videos);
+            thumbnails = thumbnails.concat(links.thumbnails);
+    
+        }
     }
     // console.log(videos);
     // console.log(thumbnails);

@@ -2,18 +2,17 @@ import { UserModel } from "../models/userModel.js";
 import { setUser } from "../services/jwtAuth.js";
 
 async function handleSignup(req, res) {
+    
     try {
         const { name, email, password } = req.body;
+
         const newUser = await UserModel.create({
             name: name,
             email: email,
             password: password,
         });
         const token = setUser(newUser);
-
         // test
-        console.log(newUser)
-        console.log(token)
 
         res.cookie('uid', token, {httpOnly:true});
         res.status(200);
@@ -32,6 +31,7 @@ async function handleLogin(req, res) {
         console.log(oldUser);
         if (oldUser.password === password) {
             const token = setUser(oldUser);
+            console.log(token)
             res.cookie('uid', token, {httpOnly:true});
             res.status(200);
             res.json({"msg":"success"});

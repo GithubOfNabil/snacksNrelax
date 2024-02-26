@@ -23,8 +23,8 @@ async function instagramScrapper(allUserId) {
         await page.waitForSelector('input[name="username"]');
         await page.waitForSelector('input[name="password"]');
 
-        await page.type('input[name="username"]', 'baby_goddz');
-        await page.type('input[name="password"]', 'Adgmptw123');
+        await page.type('input[name="username"]', process.env.INSTA_USERNAME);
+        await page.type('input[name="password"]', process.env.INSTA_PASSWORD);
         await page.click('button[type="submit"]');
         await page.waitForNavigation();
         for(let userId of allUserId) {
